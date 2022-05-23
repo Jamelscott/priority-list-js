@@ -1,4 +1,4 @@
-# PriorityList function
+# Priority List function
 
 a JavaScript function built to manage a first-in-first-out queue based on priorty.
 
