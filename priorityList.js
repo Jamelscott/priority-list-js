@@ -17,7 +17,7 @@ function priorityQueue() {
     if (this.store[priority] == undefined) this.store[priority] = [];
     this.store[priority].push(value);
     this.count++;
-    return `${value} has been added to the queue`;
+    return this.store;
   };
 
   //removes an item from the queue
@@ -26,7 +26,7 @@ function priorityQueue() {
   priorityQueue.prototype.dequeue = function () {
     maxKey = Math.max(...Object.keys(this.store));
     //[J] this edge case covers us in the case where there aren't any items in the queue to dequeue
-    if (maxKey === -Infinity) return "there are no more items to dequeue";
+    if (maxKey === -Infinity) return this.store;
     let removedItem = this.store[maxKey].shift();
     this.count--; //[J] we need to reduce the count
     //[J] we don't want any lingering empty priorirty queues, so we can deleted them when they're empty
@@ -34,7 +34,7 @@ function priorityQueue() {
       delete this.store[maxKey];
     }
     //[J] display which item was removed
-    return `${removedItem} has been removed from the queue`;
+    return this.store;
   };
 
   //[J] get a list of the total number of items in the queue
@@ -87,7 +87,11 @@ function priorityQueue() {
         let removedItem = this.store[item].splice(idx, 1); //[J] remove that item from the priority array
         this.count--; //[J] reduce count by 1 as an item was removed
         this.add(removedItem[0], newPriority); //[J] give the item a new priority based on user input
-        return;
+        //[J] if the item removed is the last item in that priority, remove the priority.
+        if (this.store[item].length == 0) {
+          delete this.store[item];
+        }
+        return this.store;
       }
     }
   };
