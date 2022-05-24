@@ -5,7 +5,7 @@
  */
 //Please note i've included all of my (Jamel's) comments with a [J] prefix, I have left your comments as is.
 function priorityQueue() {
-  //[J] I removed the size argument originally included in the function declaration as it was never called inside the function. 
+  //[J] I removed the size argument originally included in the function declaration as it was never called inside the function.
   //[J] If you'd like to impliment a max queue size, be sure to include in the .add method a conditional to check for total items in the queue.
   this.store = {}; //keys are priorities, values are arrays of elements
   this.count = 0; //[J] total number of items in the queue at a given moment
@@ -54,7 +54,12 @@ function priorityQueue() {
   //[J] I've commented on each step for you as it seemed you were having some trouble on this one.
   priorityQueue.prototype.order = function () {
     let order = []; //establish an order that we add items into based on priority
-    var keys = Object.keys(this.store).sort().reverse(); //we are reversing the list here because we want to iterate over the largest number keys first
+    var keys = Object.keys(this.store)
+      .sort(function (a, b) {
+        return a - b;
+      })
+      .reverse();
+    //we are reversing the list here because we want to iterate over the largest number keys first
     //[J] great job setting up the loop here, I chose to change it slightly as it's easier for me to visualise the code when iterating forward instaed of backward.
     for (let i = 0; i < keys.length; i++) {
       if (this.store[keys[i]].length > 1) {
@@ -74,7 +79,8 @@ function priorityQueue() {
     //[J] I decided to remove the foundItem variable as i couldn't find a use for it, please let me know why you chose to add it, maybe you see something that I don't
     //[J] forEach loops are designed for iterating over arrays where 'for in' loops are better for iterate over objects
     for (const item in this.store) {
-      if (this.store[item].includes(value)) { //[J] confirm if value was already established
+      if (this.store[item].includes(value)) {
+        //[J] confirm if value was already established
         foundItem = true; //[J] update the foundItem variable
         if (item == newPriority) return; //[J] check if the priority is already correct
         let idx = this.store[item].indexOf(value); //f[J] ind the index of the found item in the priorty array
