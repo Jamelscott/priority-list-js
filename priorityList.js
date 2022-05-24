@@ -3,16 +3,17 @@
  * Items with a higher priority are dequeued before items with a lower priority.
  * Implemented as a hash of arrays where the hash keys are priority values.
  */
+//Please note i've included all of my (Jamel's) comments with a [J] prefix, I have left your comments as is.
 function priorityQueue() {
-  //I removed the size argument originally included here as it was never called. If you'd like to impliment a max queue size, be sure that the add method includes a conditional to check for it.
-  //this could be structured as a class but using a function, let's continue as function as this was how it was initially presented.
+  //[J] I removed the size argument originally included in the function declaration as it was never called inside the function. 
+  //[J] If you'd like to impliment a max queue size, be sure to include in the .add method a conditional to check for total items in the queue.
   this.store = {}; //keys are priorities, values are arrays of elements
-  this.count = 0; //total number of items in the queue at a given moment
+  this.count = 0; //[J] total number of items in the queue at a given moment
 
   // adds an item from the queue
   // priority must be an integer (higher value has higher priority)
   priorityQueue.prototype.add = function (value, priority) {
-    //this function looks really good as is! I just added a return that provides some additional context
+    //[J] I don't see anything that isn't working as intended here. I just added a return that provides some additional context
     if (this.store[priority] == undefined) this.store[priority] = [];
     this.store[priority].push(value);
     this.count++;
@@ -20,72 +21,68 @@ function priorityQueue() {
   };
 
   //removes an item from the queue
-  // returns the oldest-added value with the highest priority
+  //returns the oldest-added value with the highest priority
+  //[J] I updated the name here to a more standard naming convention
   priorityQueue.prototype.dequeue = function () {
-    // I updated the name here to a more standard nomenclature for priorty queues
     maxKey = Math.max(...Object.keys(this.store));
-    //this edge case covers us in the case where there aren't any items in the queue to dequeue
+    //[J] this edge case covers us in the case where there aren't any items in the queue to dequeue
     if (maxKey === -Infinity) return "there are no more items to dequeue";
     let removedItem = this.store[maxKey].shift();
-    this.count--; //we need to reduce the count
-    //we don't want any lingering empty priorirty queues, so we can deleted them when they're empty
+    this.count--; //[J] we need to reduce the count
+    //[J] we don't want any lingering empty priorirty queues, so we can deleted them when they're empty
     if (this.store[maxKey].length === 0) {
       delete this.store[maxKey];
     }
-    //display which item was removed
+    //[J] display which item was removed
     return `${removedItem} has been removed from the queue`;
   };
 
-  //get a list of the total number of items in the queue
+  //[J] get a list of the total number of items in the queue
+  //[J] I renamed this method using camelCase instead of snake_case so it conforms to the rest of the style of the other functions
   priorityQueue.prototype.totalItemCount = function () {
-    //this looks good but I wanted to change the syntax slightly so it conforms to the rest of the style of the other functions.
     return this.count;
   };
 
-  //get a list of all of the priority categories in the queue
+  //[J] get a list of all of the priority categories in the queue
   priorityQueue.prototype.getAllPriorities = function () {
     return Object.keys(this.store);
   };
 
   // iterates through all the queue elements in priority-then-FIFO order
+  //[J] I chose to update the name of this funciton as forEach is the name of an array method and at a glance it may confuse others
+  //[J] I also chose to re-factor this method as it was not quite working as intended
+  //[J] I've commented on each step for you as it seemed you were having some trouble on this one.
   priorityQueue.prototype.order = function () {
-    //I chose to update the name of this funciton as forEach is the name of an array method and at a glance it may confuse others
     let order = []; //establish an order that we add items into based on priority
     var keys = Object.keys(this.store).sort().reverse(); //we are reversing the list here because we want to iterate over the largest number keys first
-
+    //[J] great job setting up the loop here, I chose to change it slightly as it's easier for me to visualise the code when iterating forward instaed of backward.
     for (let i = 0; i < keys.length; i++) {
-      // great job setting up the loop here, I chose to change it slightly as it's easier for me to visualise the code when iterating up from 0 instead of down. but the way you had it definitely works too!
       if (this.store[keys[i]].length > 1) {
-        //I chose to add an i statement here to capture arrays of lenght 1, they will be skipped if included in the folloinwg for loop
+        //[J] I chose to add an if statement here to capture arrays of lenght 1, they will be skipped if included in the folloinwg for loop
         for (var b = 0; b < this.store[keys[i]].length; b++) {
-          // I am setting up this loop to iterate over the arrays of each priority
+          //[J] I am setting up this loop to iterate over the arrays of each priority
           order.push(this.store[keys[i]][b]); //add item to order list
         }
       } else {
-        order.push(this.store[keys[i]][0]); //add item to order list
+        order.push(this.store[keys[i]][0]); //[J] add item to order list
       }
     }
-    return order; //return order so you can see the list in the console
+    return order; //[J] return order so you can see the list in the console
   };
 
   priorityQueue.prototype.changePriority = function (value, newPriority) {
-    //I decided to remove the foundItem variable as i couldn't find a use for it, please let me know why you chose to add it, maybe you see something that I don't
-    //forEach loops are designed for iterating over arrays where for in loops can iterate over objects
+    //[J] I decided to remove the foundItem variable as i couldn't find a use for it, please let me know why you chose to add it, maybe you see something that I don't
+    //[J] forEach loops are designed for iterating over arrays where 'for in' loops are better for iterate over objects
     for (const item in this.store) {
-      //confirm if value was already established
-      if (this.store[item].includes(value)) {
-        foundItem = true; //update the foundItem variable
-        if (item == newPriority) return; //check if the priority is already correct
-        let idx = this.store[item].indexOf(value); //find the index of the found item in the priorty array
-        let removedItem = this.store[item].splice(idx, 1); //remove that item from the priority array
-        this.count--; //reduce count by 1 as an item was removed
-        this.add(removedItem[0], newPriority); //give the item a new priority based on user input
+      if (this.store[item].includes(value)) { //[J] confirm if value was already established
+        foundItem = true; //[J] update the foundItem variable
+        if (item == newPriority) return; //[J] check if the priority is already correct
+        let idx = this.store[item].indexOf(value); //f[J] ind the index of the found item in the priorty array
+        let removedItem = this.store[item].splice(idx, 1); //[J] remove that item from the priority array
+        this.count--; //[J] reduce count by 1 as an item was removed
+        this.add(removedItem[0], newPriority); //[J] give the item a new priority based on user input
         return;
       }
     }
   };
 }
-// //Final thoughts// //
-//I think you did a great job on this, especially for a junior developer, you have a lot to be proud of and it's a treat to watch you progress as a developer. You not only showed me how to use prototyping and make functions usable in the dev tools but you also showed me that if statements don't require curly brackets! Oh, and setting up the function to be used as a class or function was apprecated. A couple things I think you could improve on are as follows;
-//more consistency on syntax (example using this. instead of prototype) also type to keep all naming conventions the same, try not to use snake_case and camelCase in the same project
-//test your code before submitting. there were a couple functions that did not work.
