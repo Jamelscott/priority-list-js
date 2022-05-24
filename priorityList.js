@@ -3,15 +3,16 @@
  * Items with a higher priority are dequeued before items with a lower priority.
  * Implemented as a hash of arrays where the hash keys are priority values.
  */
-function priorityQueue(size) {
-  //this could be structured as a class but using a function works too. I am not sure which is more efficient of a build at this time. Also, from my understanding functions should be named using camelCase.
+function priorityQueue() {
+  //I removed the size argument originally included here as it was never called. If you'd like to impliment a max queue size, be sure that the add method includes a conditional to check for it.
+  //this could be structured as a class but using a function, let's continue as function as this was how it was initially presented.
   this.store = {}; //keys are priorities, values are arrays of elements
   this.count = 0; //total number of items in the queue at a given moment
 
   // adds an item from the queue
   // priority must be an integer (higher value has higher priority)
   priorityQueue.prototype.add = function (value, priority) {
-    //this function looks really good! i just added a return that provides some context
+    //this function looks really good as is! I just added a return that provides some additional context
     if (this.store[priority] == undefined) this.store[priority] = [];
     this.store[priority].push(value);
     this.count++;
@@ -84,23 +85,6 @@ function priorityQueue(size) {
     }
   };
 }
-
-//queue initialization
-const queue = new priorityQueue();
-queue.add("grapes", 5);
-queue.add("orange", 1);
-queue.add("apple", 3);
-queue.add("pineapple", 5);
-queue.add("chocolate1", 6);
-queue.add("chocolate2", 6);
-queue.add("chocolate3", 6);
-queue.add("chocolate4", 6);
-queue.add("chocolate5", 6);
-queue.add("chocolate6", 6);
-queue.add("chocolate9", 2);
-queue.add("chocolate7", 6);
-queue.add("chocolate8", 6);
-
 // //Final thoughts// //
 //I think you did a great job on this, especially for a junior developer, you have a lot to be proud of and it's a treat to watch you progress as a developer. You not only showed me how to use prototyping and make functions usable in the dev tools but you also showed me that if statements don't require curly brackets! Oh, and setting up the function to be used as a class or function was apprecated. A couple things I think you could improve on are as follows;
 //more consistency on syntax (example using this. instead of prototype) also type to keep all naming conventions the same, try not to use snake_case and camelCase in the same project
