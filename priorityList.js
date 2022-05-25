@@ -83,7 +83,7 @@ function priorityQueue() {
         //[J] confirm if value was already established
         foundItem = true; //[J] update the foundItem variable
         if (item == newPriority) return; //[J] check if the priority is already correct
-        let idx = this.store[item].indexOf(value); //f[J] ind the index of the found item in the priorty array
+        let idx = this.store[item].indexOf(value); //[J] find the index of the found item in the priorty array
         let removedItem = this.store[item].splice(idx, 1); //[J] remove that item from the priority array
         this.count--; //[J] reduce count by 1 as an item was removed
         this.add(removedItem[0], newPriority); //[J] give the item a new priority based on user input
